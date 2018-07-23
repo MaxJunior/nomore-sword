@@ -1,7 +1,7 @@
 // SWORD - SWEAR Words
 
 (function(global,$){
-    var specialChars = ['.',';'];
+    var specialChars = ['.',';','?','!',','];
     var supportedLangs =  ['en','fr','pt','es'];
     var emojiPrex = '&#x1'; 
     var emojis = ['F47B','F479','F608','F921','F92C','F621','F910',
@@ -11,17 +11,13 @@
                   'F480','F92E','F922','F637','F635','F92F','F631',
                   'F40A','F432','F437','F42E','F9DF','F9DC','F64A'
     ];
-    // var emojiFury  =   ['F47B','F479','F608','F921','F92C','F621','F910'];
-    // var emojiPeps  =   ['F30B','F926','F9DB','F9D9','F930','F468','F63F'];
-    // var emojiFruit =   ['F9DF','F952','F955','F346','F352','F34C','F4A9'];
-    // var emojiInocent = ['F984','F4AB','F4A3','F44E','F4AA','F6C0','F47D'];
-    // var emojiAnimal =  ['F40A','F432','F437','F42E','F9DF','F9DC','F64A'];
+    
     var SwordWords = {
         pt : [],
         en : ['arse','ass', 'asshole','bitch','bollocks',
-            'fucker','crap','cunt','fuck','goddman','cocksucker',
+            'fucker','crap','cunt','fuck','fucking','goddman','cocksucker',
             'hell','shit','motherfucker','nigga','nigger','shitass',
-            'shithole','fuckpants','whore','twat'],
+            'shithole','fuckpants','whore','twat','hoe'],
         fr : []
     }
 
@@ -47,7 +43,7 @@
             return SwordWords[this.language];
         }
         ,
-         // check if the given language its a valid one
+       // check if the given language its a valid one
          langValidation: function(lang){
              if(supportedLangs.indexOf(lang) == -1)
                 throw 'Invalid Language: The language : ' + lang + ' is not currently defined.';
@@ -73,11 +69,13 @@
           }
           return result;
         },
-         /// TODO  remover caracteres {.,;} quando nao ha espaco entre a string
-         removeCharFromStr: function(s){
-           if(specialChars.lastIndexOf(s[s.length -1]) != -1)
+         ///  remove special caracteres {.,;} in string {#IWILLBEBACK}
+         removeSpecialChar: function(s){
+           //  console.log(s);
+           if(specialChars.lastIndexOf(s.substring(s.length -1)) != -1){
                 s = s.substring(0,s.length -1);
-         
+            }
+          //   console.log(s);
             return s;
           },
 
@@ -94,7 +92,7 @@
         ,
         // check if the word is swear in the current language
         isSwordWord : function (inputString) {
-            return (SwordWords[this.language].indexOf(inputString) == -1) ? false : true; 
+            return (SwordWords[this.language].indexOf(this.removeSpecialChar(inputString)) == -1) ? false : true; 
          },
         // given inputData string : calculate length an apply it a filter
         applyFilter: function(inputData){
@@ -103,7 +101,6 @@
         },
         
         // generate string pattern of an given size of substitute an sword
-         // TEST FASE
         generateStrMojis: function(patternSize){
            var  stringMoji='';
            var numbOfEmojis = emojis.length;
@@ -130,7 +127,7 @@
         },
         HTMLsword: function(inputSelector, outputSelector){
               var cont_info = $('#' + inputSelector ).val();
-              console.log('HTML cont_info : ',cont_info );
+            //   console.log('HTML cont_info : ',cont_info );
               cont_info = this.swordMachine(cont_info);
 
               $('#' + outputSelector).html(cont_info);
