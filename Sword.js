@@ -15,7 +15,7 @@
     var SwordWords = {
         pt : [],
         en : ['arse','ass', 'asshole','bitch','bollocks',
-            'fucker','crap','cunt','fuck','fucking','goddman','cocksucker',
+            'fucker','crap','cunt','fuck','fucking','fucker','goddman','cocksucker',
             'hell','shit','motherfucker','nigga','nigger','shitass',
             'shithole','fuckpants','whore','twat','hoe'],
         fr : []
@@ -71,11 +71,12 @@
         },
          ///  remove special caracteres {.,;} in string {#IWILLBEBACK}
          removeSpecialChar: function(s){
-           //  console.log(s);
+             console.log("Entered Content 00 " ,s);
            if(specialChars.lastIndexOf(s.substring(s.length -1)) != -1){
                 s = s.substring(0,s.length -1);
+                console.log('RemoveSpecial 01 : ', s);
             }
-          //   console.log(s);
+             console.log("Returned String 02 : ",s);
             return s;
           },
 
@@ -85,14 +86,15 @@
         processContent(arr){
             
             for(var i=0 ; i < arr.length; i++){
-                arr[i]= this.isSwordWord(arr[i].toLowerCase()) == true ? this.applyFilter(arr[i]): arr[i];
+                arr[i] = this.removeSpecialChar(arr[i]);
+                arr[i]= this.isSwordWord(arr[i].toLowerCase()) == true ? this.applyFilter(arr[i]) : arr[i];
             }
             return  this.getfilteredContent(arr);
         }
         ,
         // check if the word is swear in the current language
         isSwordWord : function (inputString) {
-            return (SwordWords[this.language].indexOf(this.removeSpecialChar(inputString)) == -1) ? false : true; 
+            return (SwordWords[this.language].indexOf(inputString) == -1) ? false : true; 
          },
         // given inputData string : calculate length an apply it a filter
         applyFilter: function(inputData){
@@ -110,7 +112,7 @@
            }
           return stringMoji;
         },
-        // given a emoji string code : concatenate it emoji prefix ()
+        // given a emoji string code : concatenate it with emoji prefix ()
         getMoji: function(emCode){
            return  emojiPrex + emCode;
         },
